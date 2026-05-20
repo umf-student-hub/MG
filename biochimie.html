@@ -1,0 +1,1061 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biochimie S2 – Fiche Examen : Formules & Interprétation</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --surface: #161922;
+  --card: #1c2030;
+  --border: #2a3045;
+  --text: #e8ecf5;
+  --muted: #7a859f;
+  --red: #ff5c5c;
+  --red-dim: #2a1520;
+  --green: #4cd98a;
+  --green-dim: #0e2419;
+  --blue: #5ca0ff;
+  --blue-dim: #101d35;
+  --gold: #f0b429;
+  --gold-dim: #261e08;
+  --accent: #7c5cff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #1c1230 0%, #101830 100%);
+  border-bottom: 2px solid var(--accent);
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+}
+.header .badge {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.8rem;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+}
+.header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1.1;
+}
+.header .sub {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+.scope {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.2rem;
+}
+.scope-pill {
+  background: rgba(124,92,255,0.15);
+  border: 1px solid rgba(124,92,255,0.4);
+  color: #a48cff;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* NAV */
+.nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+  letter-spacing: 0.03em;
+}
+.nav a:hover { background: var(--border); color: var(--text); }
+
+/* PAGE */
+.page { max-width: 860px; margin: 0 auto; padding: 2rem 1.2rem 5rem; }
+
+/* CHAPTER */
+.chapter {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 1.8rem;
+  overflow: hidden;
+}
+.chapter-header {
+  padding: 1rem 1.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.ch-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 2.8rem;
+  background: rgba(124,92,255,0.1);
+  border: 1px solid rgba(124,92,255,0.3);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.ch-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.chapter-body { padding: 1.2rem 1.5rem; }
+
+/* FORMULA BOX */
+.formula {
+  background: var(--gold-dim);
+  border: 1.5px solid var(--gold);
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  margin: 0.7rem 0;
+}
+.formula-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.formula-eq {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffd780;
+  letter-spacing: 0.02em;
+}
+.formula-note {
+  font-size: 0.78rem;
+  color: #c49a30;
+  margin-top: 0.35rem;
+}
+
+/* INTERP GRID */
+.interp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  margin: 0.7rem 0;
+}
+@media(max-width:500px) { .interp-grid { grid-template-columns: 1fr; } }
+
+.box-hyper {
+  background: var(--red-dim);
+  border: 1px solid rgba(255,92,92,0.35);
+  border-left: 3px solid var(--red);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+}
+.box-hypo {
+  background: var(--green-dim);
+  border: 1px solid rgba(76,217,138,0.25);
+  border-left: 3px solid var(--green);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+}
+.box-patho {
+  background: rgba(92,160,255,0.07);
+  border: 1px solid rgba(92,160,255,0.25);
+  border-left: 3px solid var(--blue);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin: 0.7rem 0;
+}
+.box-alert {
+  background: rgba(255,92,92,0.08);
+  border: 2px solid var(--red);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  margin: 0.7rem 0;
+}
+
+.box-label {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+.label-red   { color: var(--red); }
+.label-green { color: var(--green); }
+.label-blue  { color: var(--blue); }
+.label-gold  { color: var(--gold); }
+
+ul.c { list-style: none; padding: 0; }
+ul.c li { font-size: 0.85rem; padding: 0.15rem 0 0.15rem 1.3rem; position: relative; color: #c0cae0; }
+ul.c li::before { content: "›"; position: absolute; left: 0.2rem; color: var(--muted); font-weight: 700; }
+
+/* KEY */
+.key-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.6rem 0;
+}
+.kv {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+}
+.kv strong { color: var(--gold); }
+
+/* SECTION TITLE */
+.stitle {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin: 1rem 0 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* MEGA RECAP */
+.recap {
+  background: linear-gradient(135deg, #1a1030, #0d1528);
+  border: 1px solid rgba(124,92,255,0.3);
+  border-radius: 14px;
+  padding: 1.8rem;
+  margin: 2rem 0;
+}
+.recap-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+.recap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.7rem;
+}
+.recap-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+}
+.recap-card .rc-title { color: var(--gold); font-weight: 700; font-size: 0.78rem; margin-bottom: 0.3rem; }
+.recap-card .rc-body { font-size: 0.78rem; color: #a0aec0; line-height: 1.5; }
+.recap-card .rc-body code {
+  font-family: 'IBM Plex Mono', monospace;
+  color: #ffd780;
+  font-size: 0.8rem;
+  background: rgba(240,180,41,0.1);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+}
+
+.footer { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: var(--muted); font-style: italic; border-top: 1px solid var(--border); padding-top: 1rem; }
+
+[id] { scroll-margin-top: 55px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">Fiche Examen Adaptée</div>
+  <h1>Biochimie S2<br>Formules & Interprétation</h1>
+  <div class="sub">Chapitres XI–XXII · Sans intervalles de référence · Sans mode opératoire</div>
+  <div class="scope">
+    <span class="scope-pill">✓ Formules de calcul</span>
+    <span class="scope-pill">✓ Hypo / Hyper</span>
+    <span class="scope-pill">✓ Pathologies associées</span>
+    <span class="scope-pill">✗ Pas de valeurs normales</span>
+    <span class="scope-pill">✗ Pas de mode opératoire</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="#ch11">XI · Corps Cétoniques</a>
+  <a href="#ch12">XII · Triglycérides</a>
+  <a href="#ch13">XIII · Cholestérol</a>
+  <a href="#ch14">XIV · HDL-col</a>
+  <a href="#ch15">XV · Protéines</a>
+  <a href="#ch16">XVI · Urée</a>
+  <a href="#ch17">XVII · Créatinine</a>
+  <a href="#ch18">XVIII · Bilirubine</a>
+  <a href="#ch19">XIX · Fer</a>
+  <a href="#ch20">XX · Acide Urique</a>
+  <a href="#ch21">XXI · Calcium</a>
+  <a href="#ch22">XXII · Urine</a>
+</nav>
+
+<div class="page">
+
+<!-- ══════════════ XI ══════════════ -->
+<div class="chapter" id="ch11">
+  <div class="chapter-header">
+    <div class="ch-num">XI</div>
+    <div class="ch-title">Corps Cétoniques</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formules / Calculs clés</div>
+    <div class="formula">
+      <div class="formula-label">Critères Acidocétose Diabétique</div>
+      <div class="formula-eq">pH artériel &lt; 7,3</div>
+      <div class="formula-eq">Réserve alcaline &lt; 17 mmol/L</div>
+      <div class="formula-eq">Glycémie &gt; 14,9 mmol/L (2,5 g/L)</div>
+      <div class="formula-note">Les 3 critères doivent être réunis → URGENCE MÉDICALE</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Rapport diagnostique</div>
+      <div class="formula-eq">β-hydroxybutyrate / acétoacétate ↑↑</div>
+      <div class="formula-note">Élevé → défaut d'oxydation mitochondriale ou atteinte hépatique</div>
+    </div>
+
+    <div class="stitle">Interprétation</div>
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Hypercétonémie</div>
+        <ul class="c">
+          <li>Diabète type I décompensé ⭐</li>
+          <li>Intoxication alcoolique ou salicylée</li>
+          <li>Déficit en hormone de croissance / corticoïdes</li>
+          <li>Maladies métaboliques (déficit acétoacétyl-CoA thiolase, pyruvate carboxylase)</li>
+          <li>Fièvre chez le jeune enfant</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 Hypocétonémie</div>
+        <ul class="c">
+          <li>Toujours associée à une <strong>hypoglycémie</strong> → toujours pathologique</li>
+          <li>Hyperinsulinisme</li>
+          <li>Déficit en acyl-CoA déshydrogénase</li>
+          <li>Déficit en carnitine palmitoyl transférase II</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box-alert">
+      <div class="box-label label-red">🚨 Acidocétose Diabétique = URGENCE</div>
+      β-hydroxybutyrate élevé + réserve alcaline &lt;17 mmol/L + pH &lt;7,3 + glycémie &gt;14,9 mmol/L
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XII ══════════════ -->
+<div class="chapter" id="ch12">
+  <div class="chapter-header">
+    <div class="ch-num">XII</div>
+    <div class="ch-title">Triglycérides Sériques</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formule</div>
+    <div class="formula">
+      <div class="formula-label">Calcul du LDL (Friedewald)</div>
+      <div class="formula-eq">LDL = CT − HDL − TG/5</div>
+      <div class="formula-note">Non applicable si TG &gt;400 mg/dl ou présence de chylomicrons</div>
+    </div>
+
+    <div class="stitle">Interprétation</div>
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Hypertriglycéridémie</div>
+        <ul class="c">
+          <li>Alcool excessif</li>
+          <li>Athérosclérose, infarctus du myocarde</li>
+          <li>Pancréatite, goutte, hypothyroïdie, diabète</li>
+          <li>Grossesse, obésité, tabac, sédentarité</li>
+          <li>Familiale: autosomique dominante, ou déficit en lipoprotéine lipase</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 Hypotriglycéridémie</div>
+        <ul class="c">
+          <li>Malnutrition, cachexie</li>
+          <li>Malabsorption intestinale</li>
+          <li>α-bétalipoprotéinémie</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box-patho">
+      <div class="box-label label-blue">⚠️ Risque cardiovasculaire</div>
+      TG ≥150 mg/dl = facteur de risque cardiovasculaire, quel que soit le taux de cholestérol.<br>
+      LDL et VLDL = lipoprotéines les plus athérogènes.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XIII ══════════════ -->
+<div class="chapter" id="ch13">
+  <div class="chapter-header">
+    <div class="ch-num">XIII</div>
+    <div class="ch-title">Cholestérol Total Sérique</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formules</div>
+    <div class="formula">
+      <div class="formula-label">Cholestérol total (Équation de balance)</div>
+      <div class="formula-eq">CT = LDL + HDL + VLDL</div>
+      <div class="formula-note">VLDL ≈ TG/5 (d'après Friedewald)</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Rapport athérogène</div>
+      <div class="formula-eq">CT / HDL ≈ 2,5 à 3 (normal)</div>
+      <div class="formula-note">Rapport élevé = risque cardiovasculaire accru</div>
+    </div>
+
+    <div class="stitle">Interprétation</div>
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Hypercholestérolémie</div>
+        <ul class="c">
+          <li>Alimentaire: excès graisses saturées</li>
+          <li>Hypothyroïdie, syndrome néphrotique</li>
+          <li>Diabète, cholestase</li>
+          <li>Familiale: déficit récepteur LDL (autosomique dominante)</li>
+          <li>Médicaments: corticoïdes, progestatifs</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 Hypocholestérolémie</div>
+        <ul class="c">
+          <li>Malnutrition, hyperthyroïdie</li>
+          <li>Insuffisance hépatique sévère (cirrhose)</li>
+          <li>Anémie pernicieuse, infections chroniques</li>
+          <li>Sous traitement par statines</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box-patho">
+      <div class="box-label label-blue">Enzyme clé & traitement</div>
+      Synthèse hépatique via <strong>HMG-CoA réductase</strong> → cible des <strong>statines</strong> (hypolipémiants de référence)
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XIV ══════════════ -->
+<div class="chapter" id="ch14">
+  <div class="chapter-header">
+    <div class="ch-num">XIV</div>
+    <div class="ch-title">HDL-Cholestérol Sérique</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formules</div>
+    <div class="formula">
+      <div class="formula-label">Formule de Friedewald (calcul LDL)</div>
+      <div class="formula-eq">LDL-col = CT − HDL-col − TG/5</div>
+      <div class="formula-note">Non valide si TG &gt;400 mg/dl ou sérum lipémique</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Bilan lipidique optimal (objectifs thérapeutiques)</div>
+      <div class="formula-eq">CT &lt;200 | LDL &lt;160 | HDL &gt;60 | TG &lt;150 mg/dl</div>
+      <div class="formula-note">LDL &lt;100 mg/dl = objectif optimal en prévention cardiovasculaire</div>
+    </div>
+
+    <div class="stitle">Interprétation</div>
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 HDL élevé (favorable)</div>
+        <ul class="c">
+          <li>Âge avancé, sexe féminin</li>
+          <li>Activité physique régulière</li>
+          <li>Alcool modéré</li>
+          <li>Médicaments: fibrates, vitamine C, antiépileptiques, insuline, œstro-progestatifs</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 HDL bas → risque cardiovasculaire ↑</div>
+        <ul class="c">
+          <li>Tabac</li>
+          <li>Diabète type 2</li>
+          <li>Obésité</li>
+          <li>Médicaments: progestatifs, propranolol, diurétiques thiazidiques</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box-patho">
+      <div class="box-label label-blue">Rôle protecteur du HDL</div>
+      Transport inverse du cholestérol (tissus → foie) → anti-athérogène.<br>
+      HDL ne contient pas d'<strong>apo B</strong> (contrairement aux LDL et VLDL).
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XV ══════════════ -->
+<div class="chapter" id="ch15">
+  <div class="chapter-header">
+    <div class="ch-num">XV</div>
+    <div class="ch-title">Protéines Totales Sériques</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formules / Rapports clés</div>
+    <div class="formula">
+      <div class="formula-label">Rapport albumine / globulines</div>
+      <div class="formula-eq">A/G = Albumine / (PT − Albumine) ≈ 0,80</div>
+      <div class="formula-note">Albumine = 55–66% du total | Globulines = reste | A/G inversé en cas d'inflammation ou myélome</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Fractions électrophorétiques (% relatifs)</div>
+      <div class="formula-eq">Alb 55–66% | α1 3–5% | α2 7–12% | β 5–7% | γ 11–19%</div>
+    </div>
+
+    <div class="stitle">Interprétation</div>
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Hyperprotidémie</div>
+        <ul class="c">
+          <li>Inflammations / infections chroniques (↑ globulines)</li>
+          <li>Myélome multiple, macroglobulinémie (↑↑ gamma)</li>
+          <li>Leucémie, hypergammaglobulinémie</li>
+          <li>Déshydratation (concentration relative)</li>
+          <li>Collagénose</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 Hypoprotidémie (↓ albumine)</div>
+        <ul class="c">
+          <li>Malnutrition, malabsorption intestinale</li>
+          <li>Insuffisance hépatique (cirrhose, hépatite)</li>
+          <li>↑ catabolisme: chirurgie, traumatisme, cancer</li>
+          <li>Pertes rénales: syndrome néphrotique</li>
+          <li>Pertes digestives: entéropathie exsudative</li>
+          <li>Brûlures étendues</li>
+          <li>Hyperhydratation (hémodilution)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XVI ══════════════ -->
+<div class="chapter" id="ch16">
+  <div class="chapter-header">
+    <div class="ch-num">XVI</div>
+    <div class="ch-title">Urée Plasmatique (Azotémie)</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formule</div>
+    <div class="formula">
+      <div class="formula-label">Rapport Urée / Créatinine plasmatique</div>
+      <div class="formula-eq">U/C ≈ 50 (normal)</div>
+      <div class="formula-note">U/C &gt;100 → hyperproduction d'urée OU insuffisance rénale fonctionnelle</div>
+    </div>
+
+    <div class="stitle">Interprétation</div>
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Hyperurémie</div>
+        <div style="font-size:0.82rem;color:#c0cae0;margin-bottom:0.3rem"><em>1. Défaut d'excrétion rénale:</em></div>
+        <ul class="c">
+          <li><strong>Prérénale:</strong> oligurie, insuffisance cardiaque, cirrhose, déshydratation</li>
+          <li><strong>Rénale:</strong> glomérulonéphrites, pyélonéphrites</li>
+          <li><strong>Postrénale:</strong> obstruction (cancer prostatique, adénome)</li>
+        </ul>
+        <div style="font-size:0.82rem;color:#c0cae0;margin-top:0.4rem;margin-bottom:0.3rem"><em>2. Production excessive:</em></div>
+        <ul class="c">
+          <li>Régime hyperprotéiné</li>
+          <li>Hypercatabolisme: fièvres, infections, corticoïdes</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 Hypourémie</div>
+        <ul class="c">
+          <li>Hépatite toxique (↓ synthèse)</li>
+          <li>Insuffisance hépatique sévère</li>
+          <li>Tumeur hépatique, alcoolisme</li>
+          <li>Grossesse (clairance accrue)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box-patho">
+      <div class="box-label label-blue">Point clé</div>
+      L'urée seule a peu d'intérêt — elle doit <strong>toujours</strong> être interprétée avec la créatinine.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XVII ══════════════ -->
+<div class="chapter" id="ch17">
+  <div class="chapter-header">
+    <div class="ch-num">XVII</div>
+    <div class="ch-title">Créatinine Sérique</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formule / Seuil d'alerte</div>
+    <div class="formula">
+      <div class="formula-label">Insuffisance rénale aiguë (IRA)</div>
+      <div class="formula-eq">Créatinine ↑ &gt; 50% de la valeur basale = IRA</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Clairance de la créatinine (DFG estimé)</div>
+      <div class="formula-eq">Cockroft-Gault: [(140 − âge) × poids] / (créatininémie × 0,814)</div>
+      <div class="formula-note">× 0,85 chez la femme. Évalue la filtration glomérulaire résiduelle.</div>
+    </div>
+
+    <div class="stitle">Interprétation</div>
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Créatininémie augmentée</div>
+        <div style="font-size:0.82rem;color:#c0cae0;margin-bottom:0.3rem"><em>Atteinte rénale:</em></div>
+        <ul class="c">
+          <li>IRA: chute tensionnelle, hémorragie, septicémie</li>
+          <li>IRC: diabète, HTA, pyélonéphrite, polykystose</li>
+        </ul>
+        <div style="font-size:0.82rem;color:#c0cae0;margin-top:0.4rem;margin-bottom:0.3rem"><em>Atteinte musculaire:</em></div>
+        <ul class="c">
+          <li>Rhabdomyolyse, épuisement physique</li>
+          <li>Déshydratation sévère</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 Créatininémie diminuée</div>
+        <ul class="c">
+          <li>Faible masse musculaire (dystrophie, vieillesse)</li>
+          <li>Atteinte hépatique (↓ synthèse créatine)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box-patho">
+      <div class="box-label label-blue">IRA vs IRC</div>
+      <strong>IRA</strong> = survient en quelques heures à jours, brutalement.<br>
+      <strong>IRC</strong> = s'installe en silence, souvent découverte fortuitement.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XVIII ══════════════ -->
+<div class="chapter" id="ch18">
+  <div class="chapter-header">
+    <div class="ch-num">XVIII</div>
+    <div class="ch-title">Bilirubine Totale & Conjuguée</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formules</div>
+    <div class="formula">
+      <div class="formula-label">Bilirubine non conjuguée (indirecte)</div>
+      <div class="formula-eq">BNC = BT − BC</div>
+      <div class="formula-note">BNC normale: ≤90% de la BT | BC normale: ≤10% de la BT</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Voie de synthèse</div>
+      <div class="formula-eq">Hémoglobine → Hème → Biliverdine → Bilirubine</div>
+      <div class="formula-note">Biliverdine réductase (NADPH-dépendante) → Bilirubine libre → conjuguée dans le foie avec acide glucuronique (UDP-glucuronyl transférases)</div>
+    </div>
+
+    <div class="stitle">Types d'ictère — Interprétation</div>
+    <div class="box-patho">
+      <div class="box-label label-blue">Diagnostic différentiel des ictères</div>
+      <table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-top:0.4rem">
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:0.35rem 0.5rem;color:var(--muted);font-weight:600">Type</td>
+          <td style="padding:0.35rem 0.5rem;color:var(--muted);font-weight:600">Mécanisme</td>
+          <td style="padding:0.35rem 0.5rem;color:var(--muted);font-weight:600">Bilirubine ↑</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:0.35rem 0.5rem"><strong>Pré-hépatique</strong></td>
+          <td style="padding:0.35rem 0.5rem">Hémolyse excessive</td>
+          <td style="padding:0.35rem 0.5rem;color:var(--green)">Non conjuguée (indirecte)</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:0.35rem 0.5rem"><strong>Hépatique</strong></td>
+          <td style="padding:0.35rem 0.5rem">Défaut conjugaison (ex: Gilbert)</td>
+          <td style="padding:0.35rem 0.5rem;color:var(--green)">Non conjuguée</td>
+        </tr>
+        <tr>
+          <td style="padding:0.35rem 0.5rem"><strong>Post-hépatique</strong></td>
+          <td style="padding:0.35rem 0.5rem">Obstruction biliaire (cholestase)</td>
+          <td style="padding:0.35rem 0.5rem;color:var(--red)">Conjuguée (directe)</td>
+        </tr>
+      </table>
+      <div style="font-size:0.8rem;color:var(--muted);margin-top:0.5rem">Jaunisse visible cliniquement si bilirubinémie &gt; 2,5 mg/dl</div>
+    </div>
+
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Hyperbilirubinémie non conjuguée</div>
+        <ul class="c">
+          <li>Hémolyse (anémies hémolytiques, transfusions, auto-immunes)</li>
+          <li>Incompatibilité Rh ou ABO fœto-maternelle</li>
+          <li>Maladie de Gilbert (déficit glucurono-conjugaison, bénin)</li>
+          <li>Ictère néonatal physiologique</li>
+        </ul>
+      </div>
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Hyperbilirubinémie conjuguée</div>
+        <ul class="c">
+          <li>Hépatites (virales, alcooliques, médicamenteuses)</li>
+          <li>Cirrhose hépatique</li>
+          <li>Obstruction biliaire: lithiase, tumeur</li>
+          <li>Cholestase intra-hépatique</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box-patho">
+      <div class="box-label label-blue">Règle clé</div>
+      Bilirubinurie = <strong>toujours pathologique</strong> (signifie ↑ bilirubine conjuguée dans l'urine).
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XIX ══════════════ -->
+<div class="chapter" id="ch19">
+  <div class="chapter-header">
+    <div class="ch-num">XIX</div>
+    <div class="ch-title">Fer Sérique (Sidérémie)</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formules / Calculs</div>
+    <div class="formula">
+      <div class="formula-label">Coefficient de saturation de la transferrine (CSS)</div>
+      <div class="formula-eq">CSS = Fer sérique / CTF × 100</div>
+      <div class="formula-note">Normal: 20–45% | CSS &lt;10% = carence martiale | CSS &gt;60% = surcharge (hémochromatose)</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Capacité totale de fixation (CTF)</div>
+      <div class="formula-eq">CTF = transferrine × 25,2 (µmol/L)</div>
+      <div class="formula-note">CTF ↑ = carence en fer (plus de sites libres) | CTF ↓ = surcharge ou inflammation</div>
+    </div>
+
+    <div class="stitle">Interprétation</div>
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Hypersidérémie</div>
+        <ul class="c">
+          <li>Anémies hémolytiques: hémolyse → libération Hb → fer↑ + ferritine↑ + CTF↓</li>
+          <li>Hémochromatose génétique (chromosome 6, autosomique récessive)</li>
+          <li>Hémosidérose (transfusions multiples)</li>
+          <li>Infections chroniques</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 Hyposidérémie</div>
+        <div style="font-size:0.82rem;color:#c0cae0;margin-bottom:0.3rem"><em>Carence martiale: Fer ↓ + CTF ↑ + CSS &lt;0,10</em></div>
+        <ul class="c">
+          <li>Hémorragies gynécologiques ou digestives (90% des cas)</li>
+          <li>Carences d'apport alimentaire</li>
+          <li>Malabsorption intestinale</li>
+          <li>Grossesse (besoins ↑)</li>
+        </ul>
+        <div style="font-size:0.82rem;color:#c0cae0;margin-top:0.4rem"><em>Anémie inflammatoire: Fer ↓ mais CTF normale ← différence clé</em></div>
+      </div>
+    </div>
+    <div class="box-patho">
+      <div class="box-label label-blue">Régulateur principal</div>
+      <strong>Hepcidine</strong> (foie) bloque la ferroportine → ↓ absorption intestinale du fer.<br>
+      Transport: <strong>transferrine</strong> | Stockage: <strong>ferritine</strong> (index des réserves).
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XX ══════════════ -->
+<div class="chapter" id="ch20">
+  <div class="chapter-header">
+    <div class="ch-num">XX</div>
+    <div class="ch-title">Acide Urique (Uricémie)</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formule / Voie métabolique</div>
+    <div class="formula">
+      <div class="formula-label">Voie de synthèse</div>
+      <div class="formula-eq">Purines → Hypoxanthine → Xanthine → Acide urique</div>
+      <div class="formula-note">Enzyme clé: <strong>Xanthine oxydase</strong> → inhibée par <strong>Allopurinol</strong> (traitement de la goutte)</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Pré-éclampsie (contexte grossesse)</div>
+      <div class="formula-eq">Acide urique ↑ pendant grossesse → signe de pré-éclampsie</div>
+      <div class="formula-note">Normalement ↓ pendant la grossesse (estrogènes ↑ clairance rénale)</div>
+    </div>
+
+    <div class="stitle">Interprétation</div>
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Hyperuricémie (&gt;7 mg/dL)</div>
+        <div style="font-size:0.82rem;color:#c0cae0;margin-bottom:0.3rem"><em>Par ↑ production:</em></div>
+        <ul class="c">
+          <li>Régime riche en purines (viande rouge, abats, bière)</li>
+          <li>↑ catabolisme des acides nucléiques: hémopathies, cancers, chimiothérapie</li>
+          <li>Maladie de Lesch-Nyhan (déficit HGPRT)</li>
+        </ul>
+        <div style="font-size:0.82rem;color:#c0cae0;margin-top:0.4rem;margin-bottom:0.3rem"><em>Par ↓ excrétion:</em></div>
+        <ul class="c">
+          <li>Insuffisance rénale chronique</li>
+          <li>Jeûne, déshydratation, acidocétose diabétique</li>
+          <li>Médicaments: diurétiques thiazidiques, furosémide, β-bloquants, salicylés</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 Hypouricémie (&lt;2,5 mg/dL)</div>
+        <ul class="c">
+          <li>Insuffisance hépatique sévère</li>
+          <li>Déficit héréditaire en xanthine oxydase (xanthinurie)</li>
+          <li>Sécrétion inappropriée d'ADH (SIADH)</li>
+          <li>Allopurinol, aspirine à faible dose</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box-alert">
+      <div class="box-label label-red">⚠️ Goutte — Pathologie</div>
+      Hyperuricémie chronique → précipitation de cristaux d'urate monosodique dans les articulations → <strong>arthrite goutteuse</strong> (crise aiguë douloureuse).<br>
+      Association: HTA, maladies coronariennes, AVC.<br>
+      Traitement: <strong>Allopurinol</strong> (inhibition xanthine oxydase)
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XXI ══════════════ -->
+<div class="chapter" id="ch21">
+  <div class="chapter-header">
+    <div class="ch-num">XXI</div>
+    <div class="ch-title">Calcium Sérique</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formules</div>
+    <div class="formula">
+      <div class="formula-label">Correction du calcium selon l'albumine</div>
+      <div class="formula-eq">Ca corrigé = Ca mesuré + 0,02 × (40 − Albumine g/L)</div>
+      <div class="formula-note">Indispensable: 40% du calcium est lié à l'albumine → hypoalbuminémie → faux Ca bas</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Formes plasmatiques</div>
+      <div class="formula-eq">Ca²⁺ ionisé libre (55%) + lié albumine (40%) + anions (5%)</div>
+      <div class="formula-note">Seul le Ca²⁺ libre (55%) est biologiquement actif. Inversement proportionnel au phosphore.</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Effet du pH sur le Ca²⁺ libre</div>
+      <div class="formula-eq">Alcalose → ↑ liaison protéines → ↓ Ca²⁺ libre</div>
+      <div class="formula-note">Acidose → ↓ liaison protéines → ↑ Ca²⁺ libre</div>
+    </div>
+
+    <div class="stitle">Hormones régulatrices</div>
+    <div class="box-patho">
+      <div class="box-label label-blue">3 Hormones — Effets opposés</div>
+      <table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-top:0.4rem">
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:0.3rem 0.5rem;color:var(--muted);font-weight:600">Hormone</td>
+          <td style="padding:0.3rem 0.5rem;color:var(--muted);font-weight:600">Source</td>
+          <td style="padding:0.3rem 0.5rem;color:var(--muted);font-weight:600">Effet Ca²⁺</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:0.3rem 0.5rem"><strong>Calcitriol</strong> (1,25-dihydroxy-vit D3)</td>
+          <td style="padding:0.3rem 0.5rem">Peau → foie → rein</td>
+          <td style="padding:0.3rem 0.5rem;color:var(--red)">↑ absorption intestinale</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:0.3rem 0.5rem"><strong>PTH</strong> (parathormone)</td>
+          <td style="padding:0.3rem 0.5rem">Glandes parathyroïdes</td>
+          <td style="padding:0.3rem 0.5rem;color:var(--red)">↑ (résorption osseuse + rein)</td>
+        </tr>
+        <tr>
+          <td style="padding:0.3rem 0.5rem"><strong>Calcitonine</strong></td>
+          <td style="padding:0.3rem 0.5rem">Cellules C de la thyroïde</td>
+          <td style="padding:0.3rem 0.5rem;color:var(--green)">↓ (inhibe ostéoclastes)</td>
+        </tr>
+      </table>
+      <div style="font-size:0.8rem;color:var(--muted);margin-top:0.4rem">PTH = réponse à la ↓ Ca²⁺ | Calcitonine = réponse à la ↑ Ca²⁺</div>
+    </div>
+
+    <div class="stitle">Interprétation</div>
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Hypercalcémie</div>
+        <ul class="c">
+          <li>Hyperparathyroïdie primaire (adénome parathyroïdien)</li>
+          <li>Tumeurs osseuses (primaires ou métastatiques)</li>
+          <li>Hypervitaminose D</li>
+          <li>Sarcoïdose, immobilisation prolongée</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 Hypocalcémie</div>
+        <ul class="c">
+          <li>Hypoparathyroïdie (post-chirurgie thyroïde, auto-immune)</li>
+          <li>Carence en vitamine D → rachitisme (enfant) ou ostéomalacie (adulte)</li>
+          <li>Maladie rénale chronique</li>
+          <li>Hypoalbuminémie (↓ Ca lié, mais Ca²⁺ libre peut être normal)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ XXII ══════════════ -->
+<div class="chapter" id="ch22">
+  <div class="chapter-header">
+    <div class="ch-num">XXII</div>
+    <div class="ch-title">Examen Urinaire</div>
+  </div>
+  <div class="chapter-body">
+
+    <div class="stitle">Formules / Seuils diagnostiques</div>
+    <div class="formula">
+      <div class="formula-label">Seuil rénal du glucose (glycosurie)</div>
+      <div class="formula-eq">Glycosurie si glycémie &gt; 10 mmol/L (180 mg/dL)</div>
+      <div class="formula-note">= seuil de réabsorption tubulaire du glucose → toujours penser au diabète</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Protéinurie — seuils pathologiques</div>
+      <div class="formula-eq">Syndrome néphrotique: protéinurie &gt; 3 g/24h + albumine &lt; 30 g/L</div>
+      <div class="formula-note">Faible débit: 300 mg–3 g/24h (lésion légère-modérée)</div>
+    </div>
+    <div class="formula">
+      <div class="formula-label">Volumes urinaires — Formule diagnostique</div>
+      <div class="formula-eq">Polyurie &gt; 2 L/j | Oligurie 100–500 mL/j | Anurie &lt; 100 mL/j</div>
+    </div>
+
+    <div class="stitle">Interprétation des anomalies</div>
+    <div class="box-patho">
+      <div class="box-label label-blue">Bandelette réactive — Ce qui oriente le diagnostic</div>
+      <table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-top:0.4rem">
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:0.3rem 0.6rem;color:var(--muted);font-weight:600">Anomalie</td>
+          <td style="padding:0.3rem 0.6rem;color:var(--muted);font-weight:600">Pathologie évoquée</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.3rem 0.6rem">Leucocytes + Nitrites</td><td style="padding:0.3rem 0.6rem;color:var(--red)">Infection urinaire (ECBU)</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.3rem 0.6rem">Glycosurie</td><td style="padding:0.3rem 0.6rem;color:var(--red)">Diabète (glycémie &gt;180 mg/dl)</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.3rem 0.6rem">Corps cétoniques (acétone)</td><td style="padding:0.3rem 0.6rem;color:var(--red)">Diabète mal équilibré, acidocétose</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.3rem 0.6rem">Protéinurie</td><td style="padding:0.3rem 0.6rem;color:var(--red)">Atteinte glomérulaire rénale</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.3rem 0.6rem">Hématurie (sang)</td><td style="padding:0.3rem 0.6rem;color:var(--red)">Traumatisme, infection, calcul urinaire</td></tr>
+        <tr><td style="padding:0.3rem 0.6rem">Bilirubine + Urobilinogène</td><td style="padding:0.3rem 0.6rem;color:var(--red)">Atteinte hépatique</td></tr>
+      </table>
+    </div>
+
+    <div class="interp-grid">
+      <div class="box-hyper">
+        <div class="box-label label-red">🔺 Polyurie (&gt;2 L/j)</div>
+        <ul class="c">
+          <li>Diabète type 2 (osmotique)</li>
+          <li>Insuffisance rénale chronique</li>
+          <li>Diurétiques, alcool, café</li>
+          <li>Diabète insipide (central ou néphrogénique)</li>
+        </ul>
+      </div>
+      <div class="box-hypo">
+        <div class="box-label label-green">🔻 Oligurie / Anurie</div>
+        <ul class="c">
+          <li>Déshydratation sévère</li>
+          <li>Insuffisance cardiaque</li>
+          <li>Diarrhée/vomissements profus</li>
+          <li>IRA (intoxication métaux lourds, obstruction) ← <strong>urgence!</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="box-patho">
+      <div class="box-label label-blue">Syndrome néphrotique — Conséquences</div>
+      Protéinurie &gt;3g/24h → hypoalbuminémie → œdèmes + hypercoagulabilité + hypercholestérolémie.
+    </div>
+  </div>
+</div>
+
+<!-- MEGA RECAP -->
+<div class="recap">
+  <div class="recap-title">⭐ FORMULES À MAÎTRISER POUR L'EXAMEN</div>
+  <div class="recap-grid">
+    <div class="recap-card">
+      <div class="rc-title">LDL de Friedewald (XIV)</div>
+      <div class="rc-body"><code>LDL = CT − HDL − TG/5</code><br>Invalide si TG &gt;400 mg/dl</div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">Rapport U/C (XVI)</div>
+      <div class="rc-body"><code>U/C ≈ 50</code> normal<br><code>U/C &gt;100</code> → hyperproduction ou IRF</div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">IRA — Créatinine (XVII)</div>
+      <div class="rc-body"><code>↑ &gt;50% basale</code> = IRA<br>Cockroft: <code>(140−âge)×poids / (créat × 0,814)</code></div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">Bilirubine non conjuguée (XVIII)</div>
+      <div class="rc-body"><code>BNC = BT − BC</code><br>BC &gt;10% de BT → ictère cholestatique</div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">Saturation transferrine (XIX)</div>
+      <div class="rc-body"><code>CSS = Fer / CTF × 100</code><br>&lt;10% = carence | &gt;60% = surcharge</div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">Calcium corrigé (XXI)</div>
+      <div class="rc-body"><code>Ca corrigé = Ca + 0,02 × (40 − Alb)</code><br>Albumine en g/L</div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">Acidocétose (XI)</div>
+      <div class="rc-body"><code>pH &lt;7,3 + RA &lt;17 + glycémie &gt;14,9 mmol/L</code><br>Les 3 = urgence</div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">Syndrome néphrotique (XXII)</div>
+      <div class="rc-body"><code>Protéinurie &gt;3g/24h + Albumine &lt;30g/L</code></div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">Rapport A/G (XV)</div>
+      <div class="rc-body"><code>A/G = Albumine / (PT − Albumine) ≈ 0,80</code><br>Inversé en cas de myélome ou cirrhose</div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">Seuil rénal glucose (XXII)</div>
+      <div class="rc-body"><code>Glycosurie si glycémie &gt;180 mg/dl (10 mmol/L)</code></div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">Rapport CT/HDL (XIII-XIV)</div>
+      <div class="rc-body"><code>CT / HDL ≈ 2,5–3</code> normal<br>&gt;5 = risque athérogène élevé</div>
+    </div>
+    <div class="recap-card">
+      <div class="rc-title">Voie acide urique (XX)</div>
+      <div class="rc-body">Purines → Xanthine → <code>Xanthine oxydase</code> → Acide urique<br>Allopurinol inhibe cette enzyme</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Biochimie Médicale · 1ère Année · Chapitres XI–XXII · Fiche examen adaptée · Formules & Interprétation uniquement</div>
+</div>
+</body>
+</html>

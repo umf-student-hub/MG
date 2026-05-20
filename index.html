@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz EIA - UMF Iași</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --correct-color: #28a745;
+            --incorrect-color: #dc3545;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #e9ecef;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 1.5rem;
+            margin-top: 0;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+        }
+
+        .question-counter {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .finish-btn-top {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .finish-btn-top:hover {
+            background-color: #5a6268;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: var(--secondary-color);
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #e2e6ea;
+            border-color: #ced4da;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: #d4edda;
+            border-color: var(--correct-color);
+            color: #155724;
+        }
+
+        .option-btn.incorrect {
+            background-color: #f8d7da;
+            border-color: var(--incorrect-color);
+            color: #721c24;
+        }
+
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 40px;
+        }
+
+        .next-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: none;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .next-btn:hover {
+            background-color: #004494;
+        }
+
+        /* --- Styles du tableau de navigation --- */
+        .nav-wrapper {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .nav-wrapper h3 {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 0;
+            margin-bottom: 12px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+            gap: 6px;
+            max-height: 180px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Personnalisation de la barre de défilement (pratique pour l'iPhone) */
+        .nav-board::-webkit-scrollbar {
+            width: 6px;
+        }
+        .nav-board::-webkit-scrollbar-thumb {
+            background-color: #adb5bd;
+            border-radius: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 0;
+            text-align: center;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            background-color: var(--secondary-color);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #6c757d;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #e2e6ea;
+        }
+
+        .nav-btn.current {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background-color: white;
+        }
+
+        .nav-btn.correct {
+            background-color: #d4edda;
+            border-color: var(--correct-color);
+            color: #155724;
+        }
+
+        .nav-btn.incorrect {
+            background-color: #f8d7da;
+            border-color: var(--incorrect-color);
+            color: #721c24;
+        }
+
+        .score-container {
+            text-align: center;
+            display: none;
+        }
+
+        .score-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .restart-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        .start-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .start-screen h2 {
+            color: var(--text-color);
+            margin-bottom: 15px;
+        }
+
+        .start-screen p {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .start-btn {
+            background-color: var(--correct-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .start-btn:hover {
+            background-color: #218838;
+        }
+
+        /* On masque le quiz au chargement de la page */
+        #quiz-block {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Éthique et Intégrité Académique</h1>
+
+    <div id="start-screen" class="start-screen">
+        <h2>Prêt pour l'entraînement ?</h2>
+        <p>Ce QCM contient les 102 questions de la grille officielle d'EIA. Tu peux naviguer librement entre les questions et voir ton avancement.</p>
+        <button class="start-btn" onclick="startQuiz()">Commencer le QCM</button>
+    </div>
+    
+    <div id="quiz-block">
+        <div class="question-counter">
+            <span id="question-counter-text">Question 1 / 102</span>
+            <button class="finish-btn-top" onclick="showScore()">Terminer</button>
+        </div>
+        <div class="question-text" id="question-text">Chargement...</div>
+        <div class="options" id="options-container"></div>
+        <div class="controls">
+            <div id="feedback-msg" style="font-weight: bold;"></div>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Suivant ➔</button>
+        </div>
+
+        <div class="nav-wrapper">
+            <h3>Navigation</h3>
+            <div class="nav-board" id="nav-board"></div>
+        </div>
+    </div>
+
+    <div class="score-container" id="score-block">
+        <div class="score-text">Score : <span id="final-score">0</span> / <span id="total-answered">0</span></div>
+        <p style="color: #6c757d; margin-bottom: 25px;">Tu as répondu à <span id="answered-count">0</span> question(s) sur 102.</p>
+        <button class="restart-btn" onclick="restartQuiz()">Recommencer l'entraînement</button>
+    </div>
+</div>
+
+<script>
+    const questionsData = [
+        { question: "Un étudiant en médecine insère, mot pour mot, un paragraphe tiré d'un e-mail du coordinateur de stage dans un rapport, sans en indiquer la source. De quoi s'agit-il ?", options: ["A. Acceptable (communication interne)", "B. Plagiat textuel", "C. Simple erreur de style", "D. Auto-plagiat", "E. Réutilisation légitime"], correctIndex: 1 },
+        { question: "Une résidente reprend l'idée originale d'un collègue concernant un algorithme de triage dans le SAU et la présente comme « sienne » dans un travail. Comment s'appelle cette infraction ?", options: ["A. Plagiat textuel", "B. Vol d'idées", "C. Auto-plagiat", "D. Fraude avec des données", "E. Ce n'est pas une infraction"], correctIndex: 1 },
+        { question: "Un étudiant « réécrit » un paragraphe d'un article de cardiologie en remplaçant quelques mots par des synonymes, sans citer ses sources. Comment qualifier cet acte ?", options: ["A. Résumé correct", "B. Traduction acceptable", "C. Paraphrase inappropriée (patchwriting)", "D. Auto-plagiat", "E. Citation correcte"], correctIndex: 2 },
+        { question: "Le texte mentionne (Bouvard, 2022), mais Bouvard ne figure pas dans la liste des références. Quel est le problème ?", options: ["A. Plagiat intentionnel", "B. Tout est en ordre", "C. Erreur de citation et de référencement", "D. Auto-plagiat", "E. Salami-slicing"], correctIndex: 2 },
+        { question: "Un étudiant copie un guide de soins des plaies sur le blog de l'hôpital et l'inclut dans son projet sans le citer. Il s'agit de :", options: ["A. Domaine public", "B. Simple information", "C. Citation correcte", "D. Données ouvertes", "E. Plagiat textuel du contenu numérique"], correctIndex: 4 },
+        { question: "Un étudiant utilise un « outil de paraphrase » pour contourner Turnitin, en conservant les idées d'un article sans les citer. Selon le cours, il s'agit :", options: ["A. Création légitime", "B. Une aide éditoriale acceptable", "C. Plagiat (absence d'attribution de la source)", "D. Auto-plagiat", "E. Simple erreur mineure"], correctIndex: 2 },
+        { question: "Une collègue scanne un livre rare, utilise un logiciel de reconnaissance optique de caractères (ROC) pour pouvoir copier des passages dans son essai, sans mentionner la source. De quel type d'infraction s'agit-il ?", options: ["A. Traduction frauduleuse", "B. Auto-plagiat", "C. Plagiat d'idées", "D. Vol de données", "E. Variante du « copier-coller » (plagiat)"], correctIndex: 4 },
+        { question: "Un étudiant recopie une thèse imprimée (non numérisable) et l'insère dans son travail sans la citer. Est-ce :", options: ["A. Acceptable (il n'a pas fait de copier-coller)", "B. Il s'agit uniquement de notes personnelles", "C. Une transcription non attribuée = du plagiat", "D. Auto-plagiat", "E. Utilisation équitable à des fins académiques"], correctIndex: 2 },
+        { question: "Vous reprenez, par transcription automatique, 2 minutes d'une vidéo de cours du professeur et vous les insérez dans votre rapport sans les citer. Est-ce :", options: ["A. OK ; « l'oral » ne se cite pas", "B. Plagiat d'idées", "C. Simple erreur technique", "D. Plagiat textuel (contenu transcrit)", "E. Domaine public"], correctIndex: 3 },
+        { question: "Vous résumez la section « Méthodes » d'un article scientifique, mais vous n'indiquez aucune source. Il s'agit :", options: ["A. Résumé original", "B. Traduction acceptable", "C. Plagiat par paraphrase sans attribution", "D. Auto-plagiat", "E. Erreur mineure"], correctIndex: 2 },
+        { question: "Un étudiant traduit intégralement en roumain une critique écrite en anglais et la remet comme son propre travail. Comment appelle-t-on cela ?", options: ["A. Auto-plagiat", "B. Traduction acceptable", "C. Plagiat par traduction", "D. Simple aide à la rédaction", "E. Utilisation équitable"], correctIndex: 2 },
+        { question: "Une résidente achète un essai en espagnol sur l'éthique médicale, le traduit et le remet. Il s'agit :", options: ["A. Partage académique", "B. Plagiat d'idées", "C. Une fraude contractuelle + une traduction frauduleuse", "D. Auto-plagiat", "E. Acceptable avec auto-citation"], correctIndex: 2 },
+        { question: "Quand la traduction est-elle acceptable dans votre travail ?", options: ["A. À tout moment, si le texte est très court", "B. Seulement si personne ne le remarque", "C. Lorsque vous traduisez, vous indiquez qu'il s'agit d'une traduction personnelle et vous citez la source originale", "D. Uniquement dans les Conclusions", "E. Lors des examens"], correctIndex: 2 },
+        { question: "Selon le cours, le plagiat devient « intentionnel » lorsque...", options: ["A. L'étudiant est en troisième année", "B. Il existe de réelles opportunités d'apprendre comment l'éviter (attentes, formation explicite)", "C. La note est faible", "D. Le travail est court", "E. Le sujet est difficile"], correctIndex: 1 },
+        { question: "Le « patchwriting » chez les débutants peut être :", options: ["A. Toujours une fraude grave", "B. Seulement désagréable sur le plan stylistique", "C. Parfois une stratégie transitoire associée à un plagiat involontaire", "D. De l'auto-plagiat", "E. Sans importance sur le plan éthique"], correctIndex: 2 },
+        { question: "Afin de réduire le plagiat involontaire dans un cours clinique, l'enseignant devrait d'abord :", options: ["A. Augmenter les sanctions", "B. N'utiliser que des tests à choix multiples", "C. Donner une formation explicite sur la citation/paraphrase", "D. Interdire la bibliographie", "E. Accepter n'importe quel résumé"], correctIndex: 2 },
+        { question: "Quelle affirmation est correcte concernant le risque individuel de plagiat ?", options: ["A. L'année d'études est un facteur prédictif important", "B. La maturité peut réduire le risque, même dans les premières années", "C. Les notes élevées augmentent la reconnaissance de la fraude", "D. La personnalité n'a pas d'importance", "E. La maîtrise de soi n'a aucun rapport"], correctIndex: 1 },
+        { question: "Quel étudiant est le plus exposé au risque de fraude ?", options: ["A. Celui qui connaît bien les règles de l'établissement", "B. Les étudiants internationaux, qui ont une maîtrise limitée de la langue et ne connaissent pas les attentes", "C. Tuteur en rédaction académique", "D. Diplômé du même programme", "E. Sans accès à Internet"], correctIndex: 1 },
+        { question: "Dans une faculté avec un code d'honneur actif :", options: ["A. Les infractions ont tendance à être moins nombreuses", "B. Les infractions augmentent", "C. Cela n'a pas d'importance", "D. Seul le plagiat diminue", "E. Ce n'est qu'une tricherie"], correctIndex: 0 },
+        { question: "Les courbes strictes de notation compétitive ont tendance à :", options: ["A. Diminuer la fraude", "B. N'avoir aucun impact", "C. Encourager les comportements inappropriés", "D. Éliminer le plagiat d'idées", "E. Mettre fin au salami-slicing"], correctIndex: 2 },
+        { question: "L'indifférence institutionnelle face à la fraude transmet :", options: ["A. Un message de tolérance zéro", "B. Une approbation tacite", "C. Rien", "D. Un risque réduit", "E. Seulement une augmentation de plagiat"], correctIndex: 1 },
+        { question: "L'étudiant soumet le même travail en éthique et en méthodologie, sans en informer les professeurs. Est-ce :", options: ["A. Acceptable s'il s'agit de son propre travail", "B. Auto-plagiat", "C. Plagiat d'idées", "D. Une simple erreur de formatage", "E. Du salami-slicing"], correctIndex: 1 },
+        { question: "À propos du « salami-slicing » (publication partielle à partir du même ensemble de données), le cours affirme que :", options: ["A. C'est toujours éthique", "B. Il est toujours interdit", "C. C'est un phénomène similaire à l'auto-plagiat ; certains l'acceptent sous conditions, d'autres recommandent de l'éviter", "D. Il n'existe qu'en musicologie", "E. Cela signifie l'absence de bibliographie"], correctIndex: 2 },
+        { question: "La répétition extensive de la section « Méthodes » dans plusieurs articles de la même étude peut :", options: ["A. Être ignorée par le logiciel", "B. N'avoir aucune conséquence", "C. Susciter des soupçons d'auto-plagiat et entraîner un rejet", "D. Être obligatoire", "E. Remplacer les résultats"], correctIndex: 2 },
+        { question: "Comment un étudiant peut-il éviter l'auto-plagiat lorsqu'il développe un sujet déjà traité auparavant ?", options: ["A. Ne rien dire", "B. Cacher ses sources", "C. Inclure une brève reconnaissance concernant le cours/les travaux antérieurs", "D. Répéter mot pour mot le texte", "E. Ne changer que les synonymes"], correctIndex: 2 },
+        { question: "Prendre des notes pour un collègue malade en sémiologie et les lui envoyer est :", options: ["A. Un exemple bénin de partage individuel", "B. Du plagiat", "C. Auto-plagiat", "D. Une fraude contractuelle", "E. Du salami-slicing"], correctIndex: 0 },
+        { question: "Envoyer par e-mail son ancien travail à un collègue qui l'« adapte » et le rend maintenant :", options: ["A. C'est de l'altruisme, sans risque", "B. Seul le destinataire est responsable", "C. Les deux sont responsables : c'est du plagiat", "D. Il s'agit seulement d'une recommandation de lecture", "E. C'est une utilisation équitable entre collègues"], correctIndex: 2 },
+        { question: "Un groupe fermé distribue des « QCM résolues », des sujets et des réponses aux examens passés. D'un point de vue éthique, cela :", options: ["A. Ne pose aucun problème", "B. Est toujours légal", "C. Peut être contraire à l'éthique ; encourage la tricherie", "D. N'est qu'une solution de secours", "E. Devient de la recherche"], correctIndex: 2 },
+        { question: "Sites ouverts tels que LibGen/Sci-Hub :", options: ["A. Sont identiques à des fraudes", "B. Ne peuvent jamais être utilisés de manière éthique", "C. Font partie d'un mouvement d'accès libre, avec des motivations éthiques complexes ; le téléchargement ne justifie pas le plagiat", "D. Ils garantissent l'originalité", "E. Ils remplacent les citations"], correctIndex: 2 },
+        { question: "Comment protégez-vous votre travail lorsque vous ressentez la pression de le partager ?", options: ["A. Vous l'envoyez dans son intégralité au groupe", "B. Vous le téléchargez sur des plateformes commerciales", "C. Vous partagez de petites sections/vous floutez certaines parties avant de les partager", "D. Vous abandonnez le projet", "E. Vous le publiez"], correctIndex: 2 },
+        { question: "« Fraude contractuelle » signifie :", options: ["A. Citer de manière erronée", "B. Acheter/engager quelqu'un pour faire votre travail ou vous remplacer à l'examen", "C. Paraphraser de manière incorrecte", "D. Refaire son propre travail", "E. Travailler en équipe"], correctIndex: 1 },
+        { question: "La différence entre les « facilitateurs » et les « fournisseurs » dans la fraude contractuelle est la suivante :", options: ["A. Les facilitateurs sont des plateformes, les fournisseurs sont des proches", "B. Les facilitateurs sont des proches (amis/famille), les fournisseurs sont des commerçants (freelances/entreprises)", "C. Les deux sont uniquement des enseignants", "D. Seuls les fournisseurs trichent", "E. Les facilitateurs sont illégaux"], correctIndex: 1 },
+        { question: "Un signe suggestif pour le travail externalisé :", options: ["A. Rédaction générique, trop sophistiquée pour le niveau de l'étudiant", "B. Deux tableaux", "C. Couleur bleue dans l'en-tête", "D. Une seule illustration", "E. Format APA"], correctIndex: 0 },
+        { question: "Certaines entreprises exigent des « paiements supplémentaires » après avoir remis au client un essai fabriqué, en menaçant de publier l'essai. Cela décrit :", options: ["A. Mentorat", "B. Chantage de la part de l'industrie de la tricherie", "C. Une évaluation par les pairs", "D. Correction", "E. Utilisation équitable"], correctIndex: 1 },
+        { question: "« Ce n'est pas du plagiat, j'ai payé pour cet essai. » Selon le cours :", options: ["A. Correct - ce n'est pas du plagiat", "B. Il s'agit simplement d'un service éditorial", "C. C'est de la fraude : la paternité réelle n'appartient pas à l'étudiant", "D. Cela devient légitime si vous mentionnez la facture", "E. C'est du salami-slicing"], correctIndex: 2 },
+        { question: "Une mesure pratique anti-fraude contractuelle dans un cours clinique :", options: ["A. Il suffit d'interdire l'accès à Internet", "B. Demander des esquisses/mini-présentations intermédiaires et de brèves défenses orales du travail", "C. Augmenter le nombre de grilles", "D. Laisser la date limite libre", "E. Interdire la bibliographie"], correctIndex: 1 },
+        { question: "Un étudiant rédige intégralement son essai à l'aide d'un modèle d'I.A. et le rend sans en indiquer la source. Selon le cours, il est :", options: ["A. Acceptable", "B. Simplement une aide à la rédaction", "C. Une fraude assistée par l'I.A.", "D. Auto-plagiat", "E. Résumé correct"], correctIndex: 2 },
+        { question: "Dans les travaux générés par l'I.A., on trouve fréquemment :", options: ["A. Une bibliographie impeccable", "B. Absence d'inexactitudes", "C. Fabrication de citations/références", "D. Originalité totale", "E. Nouvelles méthodes"], correctIndex: 2 },
+        { question: "Comment créditer correctement l'utilisation de l'I.A. dans un travail, conformément au cours ?", options: ["A. Il n'y a pas besoin", "B. Il suffit de mentionner « j'ai utilisé l'IA »", "C. Indiquez le modèle et les lignes de commande utilisées, à la fin", "D. On ajoute un emoji", "E. Il suffit d'ajouter un lien"], correctIndex: 2 },
+        { question: "Un indice linguistique permettant de reconnaître un texte généré par l'IA est :", options: ["A. Une adaptation très spécifique au contexte local", "B. Style répétitif/générique, incohérences terminologiques", "C. Blagues internes au groupe", "D. Détails sur des expériences cliniques personnelles réelles", "E. Conformité parfaite avec les exigences"], correctIndex: 1 },
+        { question: "Stratégie de prévention recommandée en cours pour décourager l'I.A. et la « tricherie contractuelle » :", options: ["A. Notes uniquement issues de l'examen final", "B. Notes attribuées en fonction des « likes »", "C. Demande d'étapes/brouillons + rubriques claires", "D. Suppression des commentaires", "E. Pénalité maximale sans explications"], correctIndex: 2 },
+        { question: "« L'I.A. produit des recherches originales dont l'auteur est réellement l'étudiant. » Cette affirmation est :", options: ["A. Correcte", "B. Correcte uniquement pour les essais", "C. Fausse : l'I.A. ne produit pas de recherche originale et ne confère pas la paternité de l'œuvre à l'étudiant", "D. Correcte pour les rapports succincts", "E. Correcte si elle est traduite"], correctIndex: 2 },
+        { question: "L'assistance éditoriale « zone grise » (correction, résumé) devient une fraude lorsque :", options: ["A. Elle est mentionnée dans la note", "B. Elle ne modifie pas les idées", "C. Elle contourne l'apprentissage et le véritable auteur des idées n'est plus l'étudiant ; l'absence d'attribution aggrave la situation", "D. Elle est demandée par le professeur", "E. Elle a lieu le week-end"], correctIndex: 2 },
+        { question: "Un étudiant en médecine endommage intentionnellement un mannequin de simulation afin que le groupe rival ne puisse pas s'entraîner. Quelle infraction commet-il ?", options: ["A. Manque d'intérêt", "B. Abus d'autorité", "C. Entrave au bon déroulement du processus éducatif (faute disciplinaire)", "D. Non-discrimination", "E. Liberté académique"], correctIndex: 2 },
+        { question: "Au début du semestre, le professeur ne communique PAS les critères d'évaluation et, à la fin, il refuse d'expliquer les notes. Quel droit de l'étudiant a été violé ?", options: ["A. Le droit de faire appel", "B. Le droit à l'information sur les critères et les explications relatives aux notes", "C. Le droit à une réévaluation automatique", "D. Le droit à l'anonymat", "E. Le droit au transfert"], correctIndex: 1 },
+        { question: "Un résident accepte un hébergement payé par une entreprise pharmaceutique pour le week-end et donne un cours sur le produit. Que devait-il faire ?", options: ["A. Rien, il s'agit d'une formation continue", "B. Demander une dispense de cours", "C. Divulguer le conflit d'intérêts et, si besoin, se récuser", "D. Recommander le produit de manière plus discrète", "E. Reporter le cours de 6 mois"], correctIndex: 2 },
+        { question: "Le professeur coordonne un essai clinique sur un dispositif de la start-up dans laquelle il détient des actions. Première mesure appropriée ?", options: ["A. Publier rapidement", "B. Transférer ses actions à l'étudiant", "C. Divulguer officiellement le conflit d'intérêts et les mesures prises pour le gérer (y compris se récuser)", "D. Demander une augmentation de subvention", "E. Ignorer, car les actions sont insignifiantes"], correctIndex: 2 },
+        { question: "Dans le groupe de l'année, un étudiant publie des blagues homophobes sur un autre camarade. Comment cela se qualifie-t-il ?", options: ["A. Liberté d'expression", "B. Non-discrimination correctement appliquée", "C. Violation de la politique de non-discrimination et des valeurs de respect/tolérance", "D. Simple humour interne", "E. Conflit d'intérêts"], correctIndex: 2 },
+        { question: "Un enseignant passe la moitié du cours à raconter des histoires sans rapport avec le sujet. Il s'agit :", options: ["A. Style personnel", "B. Violation du principe de compétence (consacrer du temps à des sujets non pertinents)", "C. Liberté académique", "D. Feedback formatif", "E. Une utilisation équitable"], correctIndex: 1 },
+        { question: "Le professeur refuse de discuter d'autres points de vue et impose exclusivement son propre opinion. Selon le Code :", options: ["A. C'est la norme attendue", "B. Il s'agit d'un abus de pouvoir (interdiction d'imposer un seul point de vue)", "C. C'est toléré dans les cours à grand effectif", "D. Simple recommandation", "E. Cela dépend de l'année"], correctIndex: 1 },
+        { question: "Le secrétariat reçoit une demande d'accès aux informations relatives au barème d'examen et la « perd » intentionnellement. L'institution :", options: ["A. Respecte la transparence", "B. A le droit de garder le silence", "C. Enfreint l'obligation de NE PAS dissimuler/falsifier/détourner des informations", "D. Applique la protection des données", "E. Est dans les limites du règlement"], correctIndex: 2 },
+        { question: "Un enseignant conditionne la promotion à un stage à des « faveurs personnelles ». De quel type d'infraction s'agit-il ?", options: ["A. Aucune infraction", "B. Abus de pouvoir et violation de l'intégrité dans la relation professeur-étudiant", "C. Négligence", "D. Conflit d'intérêts institutionnel", "E. Simple erreur de communication"], correctIndex: 1 },
+        { question: "Un résident accepte une montre de luxe en échange d'une « recommandation » pour un poste. Il s'agit :", options: ["A. Du réseautage", "B. Une pratique courante", "C. Demande/acceptation de cadeaux = violation de l'intégrité", "D. Parrainage", "E. Don à la clinique"], correctIndex: 2 },
+        { question: "Un étudiant administrateur d'un groupe privé distribue les « QCM résolues » confidentielles. D'un point de vue éthique, cela :", options: ["A. Est parfait", "B. N'est qu'une aide entre collègues", "C. Favorise la fraude à l'évaluation (violant l'intégrité académique)", "D. Est protégé par la liberté académique", "E. N'a aucun impact"], correctIndex: 2 },
+        { question: "Le chef de service ajoute son nom en tant qu'auteur sans avoir contribué à l'article des résidents. Qu'en est-il ?", options: ["A. Bonne pratique", "B. Reconnaissance symbolique", "C. Abus d'autorité pour obtenir la paternité", "D. Une auto-citation légitime", "E. Ghostwriting"], correctIndex: 2 },
+        { question: "Un étudiant inclut un collègue comme coauteur sans son consentement afin de « l'aider à améliorer son CV ». Il s'agit :", options: ["A. Mentorat", "B. Éthique, si cela est connu", "C. Une violation : inclusion en tant qu'auteur sans accord", "D. Acceptable lors de conférences", "E. Normal au sein d'une équipe"], correctIndex: 2 },
+        { question: "Dans le cadre d'un projet clinique, l'étudiant « embellit » les données du patient afin qu'elles soient plus « belles ». Il s'agit de :", options: ["A. Standardisation", "B. Une falsification des données", "C. Une interprétation créative", "D. Recodage légitime", "E. Ajustement esthétique"], correctIndex: 1 },
+        { question: "Une revue compte 400 citations en 2025 pour des articles publiés en 2023-2024 ; elle a publié 100 « articles citables ». Quel est son facteur d'impact en 2025 ?", options: ["A. 2", "B. 3", "C. 4", "D. 5", "E. 6"], correctIndex: 2 },
+        { question: "Un auteur a publié 7 travaux (citations : 10, 9, 8, 5, 4, 3, 1). Quel est l'indice h de cet auteur ?", options: ["A. 3", "B. 4", "C. 5", "D. 6", "E. 7"], correctIndex: 1 },
+        { question: "Un chercheur a publié des articles dans des revues dont le FI est de 2, 3 et 5. Quel est son facteur d'impact cumulé ?", options: ["A. 5", "B. 7", "C. 8", "D. 10", "E. 15"], correctIndex: 3 },
+        { question: "Une équipe pratique un « échange de citations » sans pertinence afin de gonfler les indicateurs. Sur le plan éthique, cela :", options: ["A. C'est du réseautage", "B. C'est de la maintenance bibliographique", "C. Manipulation scientométrique - problème éthique", "D. Est recommandé", "E. Est obligatoire"], correctIndex: 2 },
+        { question: "En tant que futur médecin et chercheur, comment les indicateurs scientométriques devraient-ils être utilisés ?", options: ["A. Comme verdict final", "B. Uniquement s'ils sont élevés", "C. Comme des outils, avec transparence et conscience de leurs limites", "D. Jamais", "E. Uniquement pour les subventions"], correctIndex: 2 },
+        { question: "Un professeur commente publiquement sur les réseaux sociaux les notes d'un étudiant, en mentionnant son nom. Du point de vue de l'éthique relationnelle :", options: ["A. C'est transparent", "B. C'est recommandé", "C. Cela dépasse les limites professionnelles et affecte la confiance", "D. C'est un retour obligatoire", "E. C'est purement informatif"], correctIndex: 2 },
+        { question: "Meilleure pratique pour renforcer la confiance dans l'évaluation :", options: ["A. Critères clairement communiqués dès le début + réceptivité au feedback", "B. Pas de rubrique", "C. Notes uniquement à la fin", "D. Feedback anonyme obligatoire", "E. Épreuves orales uniquement"], correctIndex: 0 },
+        { question: "Un étudiant signale un abus de pouvoir. Que recommande le code ?", options: ["A. Ignorer", "B. De publier sur le groupe", "C. Utiliser les canaux institutionnels de signalement, sans crainte de représailles", "D. Enregistrer illégalement", "E. Écrire anonymement sur un blog"], correctIndex: 2 },
+        { question: "Un cours intègre explicitement les pratiques médicales globales afin d'éviter les préjugés culturels. Cela reflète :", options: ["A. L'abus de pouvoir", "B. Sensibilité et inclusion culturelles", "C. Conflit d'intérêts", "D. L'autocensure", "E. Un simple exercice de relations publiques"], correctIndex: 1 },
+        { question: "L'« intégrité institutionnelle » signifie, entre autres, que l'université :", options: ["A. Passe sous silence les écarts de conduite", "B. Définit et applique un code éthique rigoureux et ne tolère aucune infraction", "C. Délègue tout aux étudiants", "D. Décide au cas par cas", "E. N'a aucune responsabilité"], correctIndex: 1 },
+        { question: "Un politicien demande le retrait d'un sujet « sensible » du cours, mais le professeur refuse. Qu'est-ce qui protège l'enseignant ?", options: ["A. Le droit au silence", "B. L'autonomie de la résidence", "C. La liberté académique : enseigner/apprendre sans ingérence politique", "D. Le droit de réponse", "E. Le droit de grève"], correctIndex: 2 },
+        { question: "Une affiche sur le campus présente des caricatures offensantes à l'égard d'un symbole religieux. Selon la Charte :", options: ["A. C'est accepté comme satire", "B. Il est toujours protégé", "C. Il est interdit", "D. La caricature est simplement déplacée", "E. Un vote a lieu au Sénat"], correctIndex: 2 },
+        { question: "L'étudiant invoque la « liberté académique » pour tricher à l'examen. Une réponse correcte est que :", options: ["A. La liberté le permet", "B. Cela n'a aucun rapport - l'intégrité des étudiants interdit la fraude à l'évaluation", "C. C'est interprétable", "D. C'est acceptable pour les questionnaires à choix multiples", "E. Seulement avec l'accord du professeur"], correctIndex: 1 },
+        { question: "Un collègue supprime les fichiers de laboratoire d'un autre groupe afin de saboter leur projet. C'est :", options: ["A. De la compétition", "B. Esprit sportif", "C. Entrave à l'activité d'autrui/sabotage (faute grave)", "D. Autonomie universitaire", "E. Intégrité intellectuelle"], correctIndex: 2 },
+        { question: "Lors d'une conférence, le médecin présente des résultats financés par le fabricant du médicament. Quelle pratique est essentielle ?", options: ["A. Éviter la bibliographie", "B. Déclarer le conflit d'intérêts dans la présentation", "C. Cacher le financement", "D. Externaliser les relations publiques", "E. Se contenter de réaliser une affiche"], correctIndex: 1 },
+        { question: "En tant que critique, vous recevez pour évaluation l'article d'une entreprise dans laquelle vous détenez des actions. Éthique :", options: ["A. Vous pouvez être critique", "B. Vous ne l'acceptez que s'il est positif", "C. Vous vous récusez et déclarez un conflit d'intérêts", "D. Vous votez de manière anonyme", "E. Vous demandez une co-évaluation"], correctIndex: 2 },
+        { question: "Pour un projet clinique, le coordinateur exclut systématiquement les étudiants âgés de plus de 30 ans. Conformément à la politique :", options: ["A. Gestion de projet", "B. C'est une pratique inclusive", "C. Il s'agit de discrimination fondée sur l'âge", "D. Il s'agit d'un conflit d'intérêts", "E. C'est une protection de l'autonomie"], correctIndex: 2 },
+        { question: "Un étudiant atteint d'une maladie chronique non contagieuse demande une adaptation de l'évaluation. Réponse éthique :", options: ["A. Refus catégorique", "B. Ignorer", "C. Prise en compte des adaptations raisonnables, sans discrimination", "D. Report indéfini", "E. Conditionnement par des cadeaux"], correctIndex: 2 },
+        { question: "Le chef de laboratoire sélectionne systématiquement uniquement ses amis pour participer aux projets. Il s'agit de :", options: ["A. Méritocratie", "B. Conflit d'intérêts non financier (favoritisme) ayant un impact éthique", "C. Un simple style de management", "D. Compensation", "E. Non-discrimination"], correctIndex: 1 },
+        { question: "L'université signe des contrats de parrainage avec une entreprise dont les produits sont évalués au sein de la faculté. Quel type de conflit ?", options: ["A. Aucun", "B. Uniquement personnel", "C. Institutionnel", "D. Uniquement non financier", "E. D'auteur"], correctIndex: 2 },
+        { question: "Le professeur note « à l'œil » sans tenir compte des performances démontrées. L'écart est :", options: ["A. Insignifiante", "B. Dans les limites", "C. Une notation inappropriée sans rapport avec les compétences", "D. Feedback formatif", "E. Correction statistique"], correctIndex: 2 },
+        { question: "Le professeur conditionne l'accès au travail de laboratoire à la signature d'un document politique. Il s'agit :", options: ["A. Du volontariat", "B. Un abus de pouvoir (ingérence politique)", "C. Pratique démocratique", "D. Égalité des chances", "E. Liberté académique"], correctIndex: 1 },
+        { question: "Quelle sanction est explicitement prévue pour les étudiants dans le Code ?", options: ["A. Amende pécuniaire", "B. Réduction des frais", "C. Suspension de la bourse pour une durée déterminée", "D. Avertissement verbal", "E. Obligation de travailler pour le compte de la faculté"], correctIndex: 2 },
+        { question: "La « liberté académique » signifie, entre autres, que :", options: ["A. Les professeurs sont exemptés des règles", "B. Les étudiants peuvent tricher", "C. On peut poser des questions et partager des idées sans ingérence extérieure déraisonnable", "D. On peut refuser de passer des examens", "E. On peut demander des cadeaux"], correctIndex: 2 },
+        { question: "Un membre de la communauté universitaire dénigre publiquement ses collègues et les programmes de l'université. Selon la Charte :", options: ["A. C'est encouragé", "B. C'est autorisé au niveau de la licence", "C. La désinformation/diffamation interne est interdite", "D. Cela devient éthique sous un pseudonyme", "E. Ce n'est pas couvert"], correctIndex: 2 },
+        { question: "Qui fait partie de la « communauté universitaire » visée par le Code ?", options: ["A. Seulement les professeurs", "B. Seulement les étudiants de licence", "C. Les étudiants, étudiants en master, doctorants, résidents, personnel enseignant/recherche et administratif", "D. Seulement les invités", "E. Uniquement les anciens élèves"], correctIndex: 2 },
+        { question: "L'« intégrité » en tant que vertu personnelle, selon le cours, désigne :", options: ["A. Seulement l'honnêteté ponctuelle", "B. Une vertu complexe, liée à la cohérence de soi et à l'action morale", "C. Toute compétence technique", "D. Le courage exclusivement", "E. Le besoin de sanctions"], correctIndex: 1 },
+        { question: "En scientométrie, une pratique éthique importante consiste à :", options: ["A. Cacher la base de données utilisée", "B. La fabrication des indicateurs", "C. La transparence de la source et du mode de calcul des métriques", "D. Éliminer les articles de mauvaise qualité", "E. L'exclusivité sur un seul indice"], correctIndex: 2 },
+        { question: "Pourquoi n'est-il pas judicieux d'évaluer les carrières universitaires uniquement à l'aide de la scientométrie ?", options: ["A. Il n'existe pas d'autres méthodes", "B. Parce que les paramètres peuvent éclipser les évaluations qualitatives et diffèrent selon les domaines", "C. Parce qu'ils sont difficiles à calculer", "D. Parce que les bailleurs de fonds ne l'exigent pas", "E. Parce qu'ils ne peuvent pas être manipulés"], correctIndex: 1 },
+        { question: "L'étudiant apporte une aide technique mineure (numérisation de tableaux) à un article. Comment reconnaître sa contribution ?", options: ["A. Auteur principal", "B. Coauteur obligatoire", "C. Remerciements/reconnaissances, pas d'auteur, s'il n'y a pas de contribution intellectuelle essentielle", "D. Aucune mention", "E. Droits de propriété"], correctIndex: 2 },
+        { question: "Un médecin reçoit des honoraires de conférencier d'une entreprise et donne un cours sur son produit. Quelle combinaison de mesures est correcte ?", options: ["A. Rien + éloge du produit", "B. Divulgation au conflit d'intérêts + présentation équilibrée + éventuelle récusation", "C. Critique sévère sans fondement", "D. Secrets professionnels", "E. Seulement des avertissements généraux"], correctIndex: 1 },
+        { question: "Dans la relation professeur-étudiant, les « limites » impliquent :", options: ["A. Toute interaction est autorisée", "B. Les affaires communes sont recommandées", "C. Interactions pertinentes sur le plan académique, éviter les relations externes susceptibles de compromettre l'objectivité", "D. Amis intimes obligatoires", "E. Échange de cadeaux contre des notes"], correctIndex: 2 },
+        { question: "Comment l'UMF Iași est-elle caractérisée institutionnellement dans la Charte ?", options: ["A. Institution privée à but lucratif", "B. Institution publique, à but non lucratif, apolitique", "C. ONG à vocation éducative", "D. Fondation universitaire mixte", "E. Institution publique, partisane"], correctIndex: 1 },
+        { question: "L'environnement en ligne utilisé pour les activités de l'UMF Iași est :", options: ["A. Espace privé des plateformes", "B. Espace commercial", "C. Considéré comme un espace universitaire", "D. Domaine public non universitaire", "E. Considéré comme un espace syndical"], correctIndex: 2 },
+        { question: "Les cycles d'études universitaires à l'UMF Iași sont les suivants :", options: ["A. Un seul, intégré", "B. Licence et doctorat", "C. Cycle court, licence, master, doctorat", "D. Licence, master", "E. Master, doctorat, postdoctorat"], correctIndex: 2 },
+        { question: "Le système de crédits ECTS appliqué à l'UMF Iași permet :", options: ["A. La suppression des examens", "B. La mobilité des étudiants", "C. L'exonération des frais", "D. L'accès direct au doctorat", "E. L'équivalence automatique de tous les cours optionnels"], correctIndex: 1 },
+        { question: "Les langues d'enseignement à l'UMF Iași sont :", options: ["A. Roumain et allemand", "B. Le roumain, l'anglais et le français", "C. Roumain uniquement", "D. L'anglais et l'italien", "E. Le roumain et le français"], correctIndex: 1 },
+        { question: "Mode de financement des programmes d'études à l'UMF Iași :", options: ["A. Uniquement payant", "B. Uniquement gratuit", "C. Gratuit (budget) ou payant", "D. Gratuit pour la licence, payant pour le master", "E. Gratuit pour les étudiants internationaux"], correctIndex: 2 },
+        { question: "La mission assumée par l'UMF Iași est la suivante :", options: ["A. Éducation non formelle", "B. Recherche exclusive", "C. Éducation et recherche avancée", "D. Entrepreneuriat universitaire", "E. Conseil clinique"], correctIndex: 2 },
+        { question: "Lequel des principes suivants est consacré par la Charte ?", options: ["A. Centralisation des décisions", "B. La dépendance à l'égard des doctrines politiques", "C. Centrage de l'éducation sur l'étudiant", "D. Élimination de la mobilité académique", "E. La discrétion totale"], correctIndex: 2 },
+        { question: "La charte affirme comme principe :", options: ["A. L'exclusion des étudiants des décisions", "B. La participation des étudiants à la prise de décision", "C. Vote consultatif uniquement au niveau du groupe", "D. Participation uniquement des chefs d'année", "E. Uniquement des sondages anonymes"], correctIndex: 1 },
+        { question: "La plus haute instance décisionnelle au niveau de l'université est :", options: ["A. Le recteur", "B. Le conseil d'administration", "C. Le Sénat universitaire", "D. Le conseil de la faculté", "E. Le directeur de département"], correctIndex: 2 },
+        { question: "La proportion d'étudiants au sein du Sénat universitaire est de :", options: ["A. 10%", "B. 20%", "C. 25%", "D. 33%", "E. 50%"], correctIndex: 2 },
+        { question: "La proportion d'étudiants au sein du Conseil de la faculté est de :", options: ["A. 10%", "B. 20%", "C. 25%", "D. 33%", "E. 50%"], correctIndex: 2 },
+        { question: "Dans l'organisation des processus d'apprentissage, d'enseignement et d'évaluation, les étudiants :", options: ["A. Ne sont pas consultés", "B. Sont seulement informés après coup", "C. Sont impliqués dans la prise de décisions", "D. Ont uniquement un droit de veto", "E. Peuvent décider eux-mêmes du programme d'études"], correctIndex: 2 }
+    ];
+
+    let currentQuestionIndex = 0;
+    
+    // Tableau pour stocker l'index de la réponse choisie pour chaque question (null si pas encore répondu)
+    let userAnswers = new Array(questionsData.length).fill(null);
+
+    const questionCounterTextEl = document.getElementById("question-counter-text");
+    const questionTextEl = document.getElementById("question-text");
+    const optionsContainerEl = document.getElementById("options-container");
+    const nextBtnEl = document.getElementById("next-btn");
+    const feedbackMsgEl = document.getElementById("feedback-msg");
+    const navBoardEl = document.getElementById("nav-board");
+    const quizBlockEl = document.getElementById("quiz-block");
+    const scoreBlockEl = document.getElementById("score-block");
+
+    function startQuiz() {
+        document.getElementById("start-screen").style.display = "none";
+        document.getElementById("quiz-block").style.display = "block";
+    }
+
+    // Fonction pour revenir à la question précédente
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            loadQuestion();
+        }
+    }
+
+    // Détection des touches du clavier
+    document.addEventListener("keydown", function(event) {
+        // On vérifie que le quiz est bien en cours (pas sur l'accueil ni sur le score final)
+        if (document.getElementById("quiz-block").style.display === "block") {
+            if (event.key === "ArrowRight") {
+                nextQuestion(); // Flèche droite = question suivante
+            } else if (event.key === "ArrowLeft") {
+                prevQuestion(); // Flèche gauche = question précédente
+            }
+        }
+    });
+    
+    function initNavBoard() {
+        navBoardEl.innerHTML = "";
+        questionsData.forEach((_, index) => {
+            const btn = document.createElement("button");
+            btn.className = "nav-btn";
+            btn.textContent = index + 1;
+            btn.onclick = () => goToQuestion(index);
+            navBoardEl.appendChild(btn);
+        });
+    }
+
+    function updateNavBoard() {
+        const buttons = navBoardEl.querySelectorAll(".nav-btn");
+        buttons.forEach((btn, index) => {
+            btn.className = "nav-btn"; // Reset des classes
+            
+            if (index === currentQuestionIndex) {
+                btn.classList.add("current");
+            }
+            
+            const answeredIndex = userAnswers[index];
+            if (answeredIndex !== null) {
+                if (answeredIndex === questionsData[index].correctIndex) {
+                    btn.classList.add("correct");
+                } else {
+                    btn.classList.add("incorrect");
+                }
+            }
+        });
+    }
+
+    function loadQuestion() {
+        const currentQ = questionsData[currentQuestionIndex];
+        questionCounterTextEl.textContent = `Question ${currentQuestionIndex + 1} / ${questionsData.length}`;
+        questionTextEl.textContent = currentQ.question;
+        
+        optionsContainerEl.innerHTML = "";
+        feedbackMsgEl.textContent = "";
+        nextBtnEl.style.display = "none";
+        
+        const answeredIndex = userAnswers[currentQuestionIndex];
+
+        currentQ.options.forEach((option, index) => {
+            const button = document.createElement("button");
+            button.className = "option-btn";
+            button.textContent = option;
+            
+            if (answeredIndex !== null) {
+                button.disabled = true;
+                if (index === currentQ.correctIndex) {
+                    button.classList.add("correct");
+                } else if (index === answeredIndex) {
+                    button.classList.add("incorrect");
+                }
+            } else {
+                button.onclick = () => checkAnswer(index, button);
+            }
+            
+            optionsContainerEl.appendChild(button);
+        });
+
+        if (answeredIndex !== null) {
+            if (answeredIndex === currentQ.correctIndex) {
+                feedbackMsgEl.textContent = "Correct !";
+                feedbackMsgEl.style.color = "var(--correct-color)";
+            } else {
+                feedbackMsgEl.textContent = "Incorrect";
+                feedbackMsgEl.style.color = "var(--incorrect-color)";
+            }
+            
+            // Afficher le bouton suivant seulement si ce n'est pas la dernière question
+            if (currentQuestionIndex < questionsData.length - 1) {
+                nextBtnEl.style.display = "block";
+                nextBtnEl.textContent = "Suivant ➔";
+            }
+        }
+        
+        updateNavBoard();
+        
+        // Fait défiler le tableau de navigation pour voir la question actuelle (pratique sur mobile)
+        const currentNavBtn = navBoardEl.children[currentQuestionIndex];
+        if (currentNavBtn) {
+            currentNavBtn.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+    }
+
+    function checkAnswer(selectedIndex, selectedButton) {
+        userAnswers[currentQuestionIndex] = selectedIndex;
+        // Recharger la question pour appliquer visuellement les styles de réponse (vert/rouge)
+        loadQuestion(); 
+    }
+
+    function nextQuestion() {
+        if (currentQuestionIndex < questionsData.length - 1) {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+    }
+    
+    function goToQuestion(index) {
+        currentQuestionIndex = index;
+        loadQuestion();
+    }
+
+    function showScore() {
+        quizBlockEl.style.display = "none";
+        scoreBlockEl.style.display = "block";
+        
+        let calculatedScore = 0;
+        let answeredCount = 0;
+        
+        userAnswers.forEach((answer, index) => {
+            if (answer !== null) {
+                answeredCount++;
+                if (answer === questionsData[index].correctIndex) {
+                    calculatedScore++;
+                }
+            }
+        });
+        
+        document.getElementById("final-score").textContent = calculatedScore;
+        document.getElementById("total-answered").textContent = answeredCount;
+        document.getElementById("answered-count").textContent = answeredCount;
+    }
+
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        userAnswers = new Array(questionsData.length).fill(null);
+        scoreBlockEl.style.display = "none";
+        document.getElementById("start-screen").style.display = "block"; // Affiche l'accueil
+        loadQuestion();
+    }
+
+    // Initialisation
+    initNavBoard();
+    loadQuestion();
+</script>
+
+</body>
+</html>
